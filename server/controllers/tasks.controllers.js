@@ -1,3 +1,4 @@
+import { pool } from "../db.js";
 
 
 
@@ -11,8 +12,23 @@ export const getTask = (req , res) =>{
 }
 
 
-export const createTask = (req , res) =>{
-    res.send('creando tareas');
+export const createTask = async(req , res) =>{
+    //req.body resibe datos desde el body
+    console.log(req.body);
+    
+    //obtengo los valores de req.body
+    const {title,descripcion} = req.body;
+
+    //sintaxis mysql insertando datos a la tabla tasks
+    const [result] = await pool.query(
+        "INSERT INTO tasks(title, descripcion) values (?,?)",
+        [title,descripcion]
+            
+        
+    );
+    console.log(result);
+
+    res.json({id:result.insertId,title,descripcion,});
 }
 
 
